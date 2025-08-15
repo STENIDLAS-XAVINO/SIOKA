@@ -61,6 +61,10 @@
         <div class="d-flex gap-2 align-items-center">
           <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#searchModal"><i class="bi bi-search"></i> Recherche</button>
           <button class="btn btn-outline-dark btn-sm" id="toggleDark"><i class="bi bi-moon"></i></button>
+          <a href="{{ route('dashboard') }}" class="btn btn-danger btn-sm d-inline-flex align-items-center" style="text-decoration:none; ">
+            <span class="ms-1">Login</span>
+            <i class="bi bi-box-arrow-in-right"></i>
+          </a>
         </div>
       </div>
     </div>
