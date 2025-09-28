@@ -60,21 +60,14 @@ class ArticlesCrud extends Component
             'url'     => $this->url,
         ];
         
-        // Gérer le cas de mise à jour avec une nouvelle image
         if ($this->articleId) {
             $article = Article::findOrFail($this->articleId);
-            
-            // Supprimer l'ancienne image si une nouvelle est téléchargée
             if ($this->image && $article->image && Storage::disk('public')->exists($article->image)) {
                 Storage::disk('public')->delete($article->image);
             }
-            
-            // Stocker la nouvelle image ou conserver l'ancienne
             $data['image'] = $this->image ? $this->image->store('articles', 'public') : $article->image;
-            
             $article->update($data);
         } else {
-            // Créer un nouvel article
             $data['image'] = $this->image ? $this->image->store('articles', 'public') : null;
             Article::create($data);
         }
@@ -117,45 +110,70 @@ class ArticlesCrud extends Component
         session()->flash('message', 'Article publié avec succès.');
     }
 
+    // ---------------------------
+    // Gestion "À la une"
+    // ---------------------------
+    public function toggleUne($id)
+    {
+        $article = Article::findOrFail($id);
+
+        if ($article->is_une) {
+            // Retirer de la une
+            $article->is_une = false;
+            $article->position_une = null;
+        } else {
+            // Ajouter à la une à la dernière position
+            $lastPosition = Article::where('is_une', true)->max('position_une') ?? 0;
+            $article->is_une = true;
+            $article->position_une = $lastPosition + 1;
+        }
+
+        $article->save();
+        $this->dispatch('refreshComponent'); 
+        session()->flash('message', 'À la une mis à jour.');
+    }
+
+    // ---------------------------
     public function updatingSearch() { $this->resetPage(); }
     public function updatingFilterCat() { $this->resetPage(); }
     public function updatingFilterStatus() { $this->resetPage(); }
 
+    public function render()
+    {
+        $query = Article::query();
 
-public function render()
-{
-    $query = Article::query();
+        if ($this->search) {
+            $query->where(function ($q) {
+                $q->where('title', 'like', '%' . $this->search . '%')
+                  ->orWhere('excerpt', 'like', '%' . $this->search . '%')
+                  ->orWhere('author', 'like', '%' . $this->search . '%');
+            });
+        }
 
-    if ($this->search) {
-        $query->where(function ($q) {
-            $q->where('title', 'like', '%' . $this->search . '%')
-              ->orWhere('excerpt', 'like', '%' . $this->search . '%')
-              ->orWhere('author', 'like', '%' . $this->search . '%');
-        });
+        if ($this->filterCat) {
+            $query->where('cat', $this->filterCat);
+        }
+
+        if ($this->filterStatus) {
+            $query->where('status', $this->filterStatus);
+        }
+
+        $articles = $query->latest()->paginate(5);
+
+        // KPI
+        $totalArticles = Article::count();
+        $totalCategories = Article::distinct('cat')->count('cat');
+        $totalPublies = Article::where('status', 'publie')->count();
+        $totalBrouillons = Article::where('status', 'brouillon')->count();
+        $totalUne = Article::where('is_une', true)->count(); // <-- nombre des articles à la une
+
+        return view('livewire.articles-crud', [
+            'articles' => $articles,
+            'totalArticles' => $totalArticles,
+            'totalCategories' => $totalCategories,
+            'totalPublies' => $totalPublies,
+            'totalBrouillons' => $totalBrouillons,
+            'totalUne' => $totalUne,
+        ]);
     }
-
-    if ($this->filterCat) {
-        $query->where('cat', $this->filterCat);
-    }
-
-    if ($this->filterStatus) {
-        $query->where('status', $this->filterStatus);
-    }
-
-    $articles = $query->latest()->paginate(5);
-
-    // KPI
-    $totalArticles = Article::count();
-    $totalCategories = Article::distinct('cat')->count('cat');
-    $totalPublies = Article::where('status', 'publie')->count();
-    $totalBrouillons = Article::where('status', 'brouillon')->count();
-
-    return view('livewire.articles-crud', [
-        'articles' => $articles,
-        'totalArticles' => $totalArticles, // <-- Ajout de cette ligne
-        'totalCategories' => $totalCategories, // <-- Ajout de cette ligne
-        'totalPublies' => $totalPublies, // <-- Ajout de cette ligne
-        'totalBrouillons' => $totalBrouillons, // <-- Ajout de cette ligne
-    ]);
-}
 }

@@ -31,6 +31,17 @@ Route::get('/articles', [AppController::class, 'articles'
 Route::get('flash_infos', [AppController::class, 'flash_infos'
 ])->middleware(['auth', 'verified'])->name('flash_infos');
 
+// Page Utilisateurs
+Route::get('utilisateurs', [AppController::class, 'utilisateurs'
+])->middleware(['auth', 'verified'])->name('utilisateurs');
+
+// Page Dernière vidéos
+Route::get('derniere_video', [AppController::class, 'derniere_video'
+])->middleware(['auth', 'verified'])->name('derniere_video');
+
+
+
+// Options  Utilisateurs
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

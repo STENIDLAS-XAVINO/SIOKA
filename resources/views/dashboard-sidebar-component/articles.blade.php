@@ -22,36 +22,7 @@
 
 <!-- TOPBAR -->
 <header class="topbar py-2">
-  <div class="container-fluid d-flex align-items-center justify-content-between">
-    <span>
-      <img src="{{ asset('images/Logo_SIOKA_2.png') }}" alt="Logo" class="img-fluid" style="max-height: 40px;">        
-    </span>
-    <div class="d-flex align-items-center gap-3">
-      <span class="d-none d-md-inline text-secondary-emphasis">Tableau de bord</span>
-    </div>
-    <div class="d-flex align-items-center gap-2">
-      <button class="btn btn-sm btn-outline-secondary d-md-none" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNav" aria-label="Menu">
-        <i class="bi bi-list"></i>
-      </button>
-      <button class="btn btn-sm theme-toggle" id="btnTheme"><i class="bi bi-moon-stars me-1"></i> Thème</button>
-      <a class="btn btn-sm btn-outline-secondary d-none d-md-inline" href="{{ route('index') }}"><i class="bi bi-globe2 me-1"></i> Voir le site</a>
-      {{-- <button class="btn btn-sm btn-primary" id="btnAdd"><i class="bi bi-plus-lg me-1"></i> Nouvel article</button> --}}
-      <!-- NOM UTILISATEUR + DÉCONNEXION -->
-      <div class="dropdown d-none d-md-inline">
-        <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="userMenu" data-bs-toggle="dropdown" aria-expanded="false">
-          Admin
-        </button>
-        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenu">
-          <li>
-            <form method="POST" action="{{ route('logout') }}">
-              @csrf
-              <button class="dropdown-item text-danger" type="submit"><i class="bi bi-box-arrow-right me-1"></i> Déconnexion</button>
-            </form>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </div>
+  @include('dashboard-sidebar-component.topbar')
 </header>
 
 
@@ -69,113 +40,13 @@
     <!-- MAIN -->
     <main class="col-md-10 ms-sm-auto px-3 px-md-4 py-4">
       <div class="d-flex justify-content-between align-items-center mb-3">
-        <h1 class="h4 m-0">Bienvenue</h1>
+        <h1 class="h4 m-0">Articles</h1>
         <div class="d-flex gap-2">
           <button class="btn btn-outline-secondary btn-sm" id="btnExportTop"><i class="bi bi-download me-1"></i> Exporter</button>
           <button class="btn btn-outline-danger btn-sm" id="btnResetTop"><i class="bi bi-trash me-1"></i> Vider</button>
         </div>
       </div>
 
-      {{-- <!-- STATS / KPI -->
-      <div class="row g-3 mb-4" id="statsRow">
-        <div class="col-6 col-lg-3">
-          <div class="card-soft kpi p-3 d-flex flex-row align-items-center gap-3">
-            <div class="icon icon-violet"><i class="bi bi-newspaper"></i></div>
-            <div><h6 class="mb-0">Articles</h6><span class="fw-bold fs-5" id="statTotal">0</span></div>
-          </div>
-        </div>
-        <div class="col-6 col-lg-3">
-          <div class="card-soft kpi p-3 d-flex flex-row align-items-center gap-3">
-            <div class="icon icon-bleu"><i class="bi bi-tags"></i></div>
-            <div><h6 class="mb-0">Catégories</h6><span class="fw-bold fs-5" id="statCats">0</span></div>
-          </div>
-        </div>
-        <div class="col-6 col-lg-3">
-          <div class="card-soft kpi p-3 d-flex flex-row align-items-center gap-3">
-            <div class="icon icon-jaune"><i class="bi bi-cloud-upload"></i></div>
-            <div><h6 class="mb-0">Publiés</h6><span class="fw-bold fs-5" id="statPub">0</span></div>
-          </div>
-        </div>
-        <div class="col-6 col-lg-3">
-          <div class="card-soft kpi p-3 d-flex flex-row align-items-center gap-3">
-            <div class="icon icon-muted"><i class="bi bi-hourglass-split"></i></div>
-            <div><h6 class="mb-0">Brouillons</h6><span class="fw-bold fs-5" id="statDraft">0</span></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- TOOLBAR FILTRES -->
-      <div class="card-soft p-3 mb-4 d-flex flex-column flex-md-row align-items-md-center toolbar">
-        <div class="input-group flex-grow-1">
-          <span class="input-group-text bg-transparent border-0"><i class="bi bi-search"></i></span>
-          <input id="q" type="search" class="form-control" placeholder="Rechercher un article (titre, extrait, auteur)…">
-        </div>
-        <div class="d-flex gap-2 ms-md-2 mt-2 mt-md-0">
-          <select id="filtreCat" class="form-select">
-            <option value="">Toutes les catégories</option>
-            <option value="gouvernance">Gouvernance</option>
-            <option value="societe">Société</option>
-            <option value="environnement">Environnement</option>
-            <option value="economie">Économie</option>
-            <option value="culture">Culture</option>
-            <option value="sport">Sport</option>
-          </select>
-          <select id="filtreStatut" class="form-select">
-            <option value="">Tous statuts</option>
-            <option value="publie">Publié</option>
-            <option value="brouillon">Brouillon</option>
-          </select>
-        </div>
-      </div>
-
-      <!-- TABLE ARTICLES -->
-      <div class="card-soft shadow-sm rounded-4">
-        <div class="card-header bg-transparent border-0 d-flex justify-content-between align-items-center">
-          <h5 class="card-title mb-0">Articles</h5>
-          <div class="dropdown">
-            <button class="btn btn-sm btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown">Actions</button>
-            <ul class="dropdown-menu dropdown-menu-end">
-              <li><a class="dropdown-item" href="#" id="menuAdd"><i class="bi bi-plus-lg me-2"></i>Ajouter</a></li>
-              <li><a class="dropdown-item" href="#" id="menuExport"><i class="bi bi-download me-2"></i>Exporter JSON</a></li>
-              <li><a class="dropdown-item text-danger" href="#" id="menuReset"><i class="bi bi-trash me-2"></i>Réinitialiser</a></li>
-            </ul>
-          </div>
-        </div>
-        <div class="table-responsive">
-          <table class="table align-middle mb-0" id="tableArticles">
-            <thead>
-              <tr>
-                <th style="width:48px">#</th>
-                <th>Titre</th>
-                <th>Catégorie</th>
-                <th>Date</th>
-                <th>Auteur</th>
-                <th>Statut</th>
-                <th style="width:160px">Actions</th>
-              </tr>
-            </thead>
-            <tbody id="tbodyArticles"><!-- rows --></tbody>
-          </table>
-        </div>
-      </div>
-
-      
-
-      <!-- CHARTS (facultatif, pur front) -->
-      <div class="row g-3 mt-4">
-        <div class="col-lg-7">
-          <div class="card-soft p-3">
-            <div class="d-flex justify-content-between align-items-center mb-2"><h6 class="m-0">Tendances de publication</h6><span class="text-secondary small">demo</span></div>
-            <canvas id="lineChart" height="90"></canvas>
-          </div>
-        </div>
-        <div class="col-lg-5">
-          <div class="card-soft p-3 h-100">
-            <div class="d-flex justify-content-between align-items-center mb-2"><h6 class="m-0">Répartition par statut</h6><span class="text-secondary small">demo</span></div>
-            <canvas id="doughnutChart" height="90"></canvas>
-          </div>
-        </div>
-      </div> --}}
 
 
       @livewire('articles-crud')

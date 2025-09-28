@@ -10,21 +10,25 @@ class AppController extends Controller
 {
     public function index()
     {
+        // Récupérer les articles marqués "à la une"
         $une = Article::where('status', 'publie')
-                    ->orderBy('date', 'desc')
+                    ->where('is_une', true)
+                    ->orderBy('updated_at', 'desc') // <-- trie par date la plus récente
                     ->take(5)
                     ->get();
 
+        // Actus classiques (hors à la une si tu veux)
         $actus = Article::where('status', 'publie')
                         ->orderBy('date', 'desc')
                         ->take(8)
                         ->get();
 
-        // Ajoutez cette ligne pour récupérer les catégories uniques
-            $categories = Article::distinct('cat')->pluck('cat');
+        // Catégories uniques
+        $categories = Article::distinct('cat')->pluck('cat');
 
-            return view('index', compact('une', 'actus', 'categories'));
+        return view('index', compact('une', 'actus', 'categories'));
     }
+
 
     public function show($id)
     {
@@ -76,5 +80,16 @@ class AppController extends Controller
     public function flash_infos()
     {
         return view('dashboard-sidebar-component.flash_infos');
+    }
+
+    // Utilisateurs
+    public function utilisateurs()
+    {
+        return view('dashboard-sidebar-component.utilisateurs');
+    }
+
+    public function derniere_video()
+    {
+        return view('dashboard-sidebar-component.derniere_video');
     }
 }

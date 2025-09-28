@@ -23,7 +23,7 @@
 
     <!-- KPI -->
     <div class="row g-3 mb-4">
-        <div class="col-6 col-lg-3">
+        <div class="col-6 col-lg-2">
             <div class="card-soft kpi d-flex align-items-center gap-3">
                 <div class="icon icon-violet"><i class="bi bi-newspaper"></i></div>
                 <div>
@@ -32,7 +32,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-6 col-lg-3">
+        <div class="col-6 col-lg-2">
             <div class="card-soft kpi d-flex align-items-center gap-3">
                 <div class="icon icon-bleu"><i class="bi bi-tags"></i></div>
                 <div>
@@ -41,7 +41,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-6 col-lg-3">
+        <div class="col-6 col-lg-2">
             <div class="card-soft kpi d-flex align-items-center gap-3">
                 <div class="icon icon-jaune"><i class="bi bi-cloud-upload"></i></div>
                 <div>
@@ -50,7 +50,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-6 col-lg-3">
+        <div class="col-6 col-lg-2">
             <div class="card-soft kpi d-flex align-items-center gap-3">
                 <div class="icon icon-muted"><i class="bi bi-hourglass-split"></i></div>
                 <div>
@@ -59,67 +59,91 @@
                 </div>
             </div>
         </div>
+        <div class="col-6 col-lg-2">
+            <div class="card-soft kpi d-flex align-items-center gap-3">
+                <div class="icon icon-jaune"><i class="bi bi-star-fill"></i></div>
+                <div>
+                    <h6>Articles à la une</h6>
+                    <span class="fw-bold fs-5">{{ $totalUne }}</span>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- TABLEAU -->
-    <div class="table-responsive card-soft p-3 rounded-4 shadow-sm">
-        <table class="table align-middle mb-0">
-            <thead>
+<div class="table-responsive card-soft p-3 rounded-4 shadow-sm">
+    <table class="table align-middle mb-0">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Image</th>
+                <th>Titre</th>
+                <th>Catégorie</th>
+                <th>Date</th>
+                <th>Auteur</th>
+                <th>Statut</th>
+                <th>À la une</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @forelse($articles as $i => $a)
                 <tr>
-                    <th>#</th>
-                    <th>Image</th>
-                    <th>Titre</th>
-                    <th>Catégorie</th>
-                    <th>Date</th>
-                    <th>Auteur</th>
-                    <th>Statut</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                @forelse($articles as $i => $a)
-                    <tr>
-                        <td>{{ $i + 1 + ($articles->currentPage()-1) * $articles->perPage() }}</td>
-                        <td>
-                            @if($a->image)
-                                <img src="{{ asset('storage/'.$a->image) }}" class="img-thumbnail" style="width:60px; height:60px; object-fit:cover;">
-                            @else
-                                <div style="width:60px;height:60px;background:#f0f0f0;border-radius:6px;"></div>
-                            @endif
-                        </td>
-                        <td>{{ $a->title }}</td>
-                        <td>{{ $a->cat }}</td>
-                        <td>{{ \Carbon\Carbon::parse($a->date)->format('d-m-Y') }}</td>
-                        <td>{{ $a->author }}</td>
-                        <td>{{ ucfirst($a->status) }}</td>
-                    <td class="d-flex gap-1">
+                    <td>{{ $i + 1 + ($articles->currentPage()-1) * $articles->perPage() }}</td>
+                    <td>
+                        @if($a->image)
+                            <img src="{{ asset('storage/'.$a->image) }}" class="img-thumbnail" style="width:60px; height:60px; object-fit:cover;">
+                        @else
+                            <div style="width:60px;height:60px;background:#f0f0f0;border-radius:6px;"></div>
+                        @endif
+                    </td>
+                    <td>{{ $a->title }}</td>
+                    <td>{{ $a->cat }}</td>
+                    <td>{{ \Carbon\Carbon::parse($a->date)->format('d-m-Y') }}</td>
+                    <td>{{ $a->author }}</td>
+                    <td>{{ ucfirst($a->status) }}</td>
+                    <td class="text-center">
+                        @if($a->is_une)
+                            <button class="btn btn-sm btn-warning" wire:click="toggleUne({{ $a->id }})">
+                                <i class="bi bi-star-fill"></i> {{ $a->position_une }}
+                            </button>
+                        @else
+                            <button class="btn btn-sm btn-outline-warning" wire:click="toggleUne({{ $a->id }})">
+                                <i class="bi bi-star"></i>
+                            </button>
+                        @endif
+                    </td>
+                    <td class="d-flex gap-1 flex-wrap">
+                        <!-- Modifier -->
                         <button class="btn btn-sm btn-warning" wire:click="edit({{ $a->id }})" data-bs-toggle="modal" data-bs-target="#modalArticle">
                             <i class="bi bi-pencil"></i>
                         </button>
+
+                        <!-- Supprimer -->
                         <button class="btn btn-sm btn-danger" wire:click="delete({{ $a->id }})" onclick="return confirm('Supprimer cet article ?')">
                             <i class="bi bi-trash"></i>
                         </button>
 
+                        <!-- Publier -->
                         @if($a->status !== 'publie')
                             <button class="btn btn-sm btn-success" wire:click="publish({{ $a->id }})">
                                 <i class="bi bi-upload"></i> Publier
                             </button>
                         @endif
                     </td>
+                </tr>
+            @empty
+                <tr><td colspan="9" class="text-center">Aucun article</td></tr>
+            @endforelse
+        </tbody>
+    </table>
 
-                    </tr>
-                @empty
-                    <tr><td colspan="8" class="text-center">Aucun article</td></tr>
-                @endforelse
-            </tbody>
-        </table>
-        
-        <div class="mt-3 d-flex justify-content-center">
-            {{ $articles->links('pagination::bootstrap-5') }}
-        </div>
-
-
+    <div class="mt-3 d-flex justify-content-center">
+        {{ $articles->links('pagination::bootstrap-5') }}
     </div>
+</div>
+
+
 
     <!-- MODAL ARTICLE -->
     <div wire:ignore.self class="modal fade" id="modalArticle" tabindex="-1">

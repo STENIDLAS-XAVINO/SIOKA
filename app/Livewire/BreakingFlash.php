@@ -11,7 +11,7 @@ class BreakingFlash extends Component
 
     public function mount()
     {
-        // Récupère tous les flashs publiés
+        // Récupérer tous les flashs publiés
         $this->flashInfos = FlashInfos::where('statut', 'publie')
             ->orderBy('date_publication', 'desc')
             ->get();
