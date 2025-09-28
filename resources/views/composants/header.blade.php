@@ -1,5 +1,8 @@
+  <!-- BREAKING -->
+  @livewire('breaking-flash')
+  
   <!-- TOPBAR -->
-  <div class="topbar py-2">
+  <div class="topbar py-2 ">
     <div class="container d-flex align-items-center justify-content-between">
       <div class="d-flex gap-3 align-items-center">
         <nav class="d-none d-md-flex gap-3 small align-items-center">
@@ -32,9 +35,9 @@
       </button>
       <div class="collapse navbar-collapse" id="navMain">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item"><a class="nav-link active" wire:navigate href="/">Accueil</a></li>
+          <li class="nav-item"><a class="nav-link active"   href="/">Accueil</a></li>
           <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" wire:navigate href="{{ route('gouvernance') }}" id="actualitesDropdown" role="button" aria-expanded="false">
+              <a class="nav-link dropdown-toggle"  href="{{ route('gouvernance') }}" id="actualitesDropdown" role="button" aria-expanded="false">
                 Gouvernance
               </a>
               <ul class="dropdown-menu" aria-labelledby="actualitesDropdown">
@@ -43,9 +46,9 @@
                 <li><a class="dropdown-item" href="#foncier">Foncier</a></li>
               </ul>
             </li>
-          <li class="nav-item"><a class="nav-link" wire:navigate href="{{ route('economie') }}">Économie</a></li>
+          <li class="nav-item"><a class="nav-link"  href="{{ route('economie') }}">Économie</a></li>
           <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" wire:navigate href="{{ route('social') }}" id="actualitesDropdown" role="button" aria-expanded="false">
+              <a class="nav-link dropdown-toggle"  href="{{ route('social') }}" id="actualitesDropdown" role="button" aria-expanded="false">
                 Social
               </a>
               <ul class="dropdown-menu" aria-labelledby="actualitesDropdown">
@@ -54,9 +57,9 @@
                 <li><a class="dropdown-item" href="#genre_droit_homme">Genre - Droit de l'Homme - Personnes Vulnérables</a></li>
               </ul>
           </li>
-          <li class="nav-item"><a class="nav-link" wire:navigate href="{{ route('sport-culture') }}">Sport & Culture</a></li>
-          <li class="nav-item"><a class="nav-link" wire:navigate href="{{ route('jeunes-femmes') }}">Jeunes & Femmes</a></li>
-          <li class="nav-item"><a class="nav-link" wire:navigate href="{{ route('equipe') }}">L'Équipe</a></li>
+          <li class="nav-item"><a class="nav-link"  href="{{ route('sport-culture') }}">Sport & Culture</a></li>
+          <li class="nav-item"><a class="nav-link"  href="{{ route('jeunes-femmes') }}">Jeunes & Femmes</a></li>
+          <li class="nav-item"><a class="nav-link"  href="{{ route('equipe') }}">L'Équipe</a></li>
         </ul>
         <div class="d-flex gap-2 align-items-center">
           <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#searchModal"><i class="bi bi-search"></i> Recherche</button>
@@ -92,11 +95,3 @@
     </div>
   </div>
 
-  <!-- BREAKING -->
-  <div id="breaking" class="breaking py-2" role="region" aria-live="polite">
-    <div class="container d-flex gap-3 align-items-center">
-      <span class="text-uppercase small fw-bold"><i class="bi bi-broadcast me-1"></i> Breaking</span>
-      <div class="marquee flex-grow-1 small"><span id="breakingText">FLASH INFOS 15H — Naiditra amponja vonjimaika ireo voarohirohy tamin'ny afera Boeing 777•</span></div>
-      <button class="btn btn-sm btn-light" id="btnCloseBreaking" aria-label="Masquer"><i class="bi bi-x"></i></button>
-    </div>
-  </div>

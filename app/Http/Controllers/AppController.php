@@ -3,12 +3,37 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Article; // <-- importer le modèle Article
+
 
 class AppController extends Controller
 {
     public function index()
     {
-        return view('index');
+        $une = Article::where('status', 'publie')
+                    ->orderBy('date', 'desc')
+                    ->take(5)
+                    ->get();
+
+        $actus = Article::where('status', 'publie')
+                        ->orderBy('date', 'desc')
+                        ->take(8)
+                        ->get();
+
+        // Ajoutez cette ligne pour récupérer les catégories uniques
+            $categories = Article::distinct('cat')->pluck('cat');
+
+            return view('index', compact('une', 'actus', 'categories'));
+    }
+
+    public function show($id)
+    {
+        // Recherche l'article par son ID au lieu de son slug
+        $article = Article::where('id', $id)
+                        ->where('status', 'publie')
+                        ->firstOrFail();
+
+        return view('article.show', compact('article'));
     }
 
     public function gouvernance()
@@ -39,5 +64,17 @@ class AppController extends Controller
     public function equipe()
     {
         return view('equipe');
+    }
+
+
+    // Partie pour dashboard
+    public function articles()
+    {
+        return view('dashboard-sidebar-component.articles');
+    }
+
+    public function flash_infos()
+    {
+        return view('dashboard-sidebar-component.flash_infos');
     }
 }

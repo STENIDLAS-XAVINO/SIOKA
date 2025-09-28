@@ -1,0 +1,56 @@
+
+    /* ==========================
+       Thème & variables Sioka
+       ========================== */
+    :root{
+      --violet: #6a35ff; --violet-700:#4a20cc; --bleu:#02a6c9; --jaune:#ffcc33;
+      --ink:#0b1b2b; --bg:#f5f7fb; --card:#ffffff; --muted:#6c7a86; --border:#e8eef4;
+      --sidebar-bg: linear-gradient(180deg, #1f1445 0%, #2a1e62 100%);
+      --sidebar-text: #e9e7ff; --sidebar-dim:#bcb6e9; --table-head:#251a57;
+    }
+    [data-theme="dark"]{
+      --bg:#0f1220; --card:#151935; --ink:#e9ecf7; --muted:#a7b0c0; --border:#23284a;
+      --sidebar-bg: linear-gradient(180deg, #14112b 0%, #1a1740 100%);
+      --sidebar-text:#d7dbff; --sidebar-dim:#9aa2da; --table-head:#1e1a3e;
+    }
+
+    html,body{background:var(--bg);color:var(--ink);font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif}
+    a{text-decoration:none}
+
+    /* ===== Topbar ===== */
+    .topbar{position:sticky;top:0;z-index:1030;background:rgba(255,255,255,.65);backdrop-filter:saturate(140%) blur(8px);border-bottom:1px solid var(--border)}
+    [data-theme="dark"] .topbar{background:rgba(16,20,40,.7)}
+    .brand-badge{background:linear-gradient(90deg,var(--violet-700),var(--violet));color:#fff;padding:.35rem .7rem;border-radius:.6rem;font-weight:800;letter-spacing:.5px}
+
+    /* ===== Layout ===== */
+    .app{min-height:100dvh}
+    .sidebar{background:var(--sidebar-bg);color:var(--sidebar-text)}
+    .sidebar .nav-link{color:var(--sidebar-dim);font-weight:600;border-radius:.65rem}
+    .sidebar .nav-link.active{background:rgba(255,255,255,.12);color:#fff}
+    .sidebar .nav-link:hover{background:rgba(255,255,255,.08);color:#fff}
+    .sidebar .menu-title{color:rgba(255,255,255,.65);font-size:.75rem;letter-spacing:.08em;font-weight:700;margin-top:.75rem}
+
+    /* ===== Cards / widgets ===== */
+    .card-soft{border:1px solid var(--border);border-radius:1rem;background:var(--card);box-shadow:0 6px 18px rgba(16,24,40,.06)}
+    .kpi{transition:transform .18s ease, box-shadow .18s ease}
+    .kpi:hover{transform:translateY(-4px);box-shadow:0 10px 28px rgba(16,24,40,.12)}
+    .kpi .icon{width:46px;height:46px;border-radius:12px;display:grid;place-items:center;font-size:1.2rem}
+    .icon-violet{background:rgba(106,53,255,.12);color:#7e5bff}
+    .icon-bleu{background:rgba(2,166,201,.12);color:#0bb0cf}
+    .icon-jaune{background:rgba(255,204,51,.18);color:#c09400}
+    .icon-muted{background:rgba(108,122,134,.15);color:#8a96a3}
+
+    /* ===== Table ===== */
+    .table thead th{white-space:nowrap;border-bottom:none;background:var(--table-head);color:#fff}
+    .table tbody tr:hover{background:rgba(106,53,255,.06)}
+    .badge-cat{font-weight:700}
+
+    /* ===== Toolbar filtres ===== */
+    .toolbar{gap:.5rem}
+    .toolbar .form-control,.toolbar .form-select{border-radius:.7rem;border:1px solid var(--border);background:var(--card);color:var(--ink)}
+
+    /* ===== Offcanvas (mobile) ===== */
+    .offcanvas-nav .nav-link{font-weight:700}
+
+    /* ===== Toggle thème ===== */
+    .theme-toggle{border:1px solid var(--border)}

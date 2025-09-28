@@ -18,7 +18,10 @@
         <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100 dark:bg-gray-900">
             <div>
                 <a href="/">
-                    <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
+                    <!-- <x-application-logo class="w-20 h-20 fill-current text-gray-500" /> -->
+                     <span>
+                        <img class="w-20 h-20 fill-current text-gray-500" src="{{ asset('images/Logo_SIOKA_2.png') }}" alt="" srcset="">
+                     </span>
                 </a>
             </div>
 

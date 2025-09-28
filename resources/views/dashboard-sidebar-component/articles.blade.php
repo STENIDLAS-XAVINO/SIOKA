@@ -4,7 +4,11 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Sioka – Dashboard (Metis‑inspiré)</title>
+  <title>Dashboard | Articles</title>
+
+  {{-- Icône --}}
+  <link rel="icon" href="{{ asset('images/Logo_SIOKA_2.png') }}" type="image/png">
+  <link rel="shortcut icon" href="{{ asset('images/Logo_SIOKA_2.png') }}" type="image/png">
   
   <!-- Bootstrap & Icons -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -12,72 +16,17 @@
   
   <!-- Police moderne -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-  <style>
-    /* ==========================
-       Thème & variables Sioka
-       ========================== */
-    :root{
-      --violet: #6a35ff; --violet-700:#4a20cc; --bleu:#02a6c9; --jaune:#ffcc33;
-      --ink:#0b1b2b; --bg:#f5f7fb; --card:#ffffff; --muted:#6c7a86; --border:#e8eef4;
-      --sidebar-bg: linear-gradient(180deg, #1f1445 0%, #2a1e62 100%);
-      --sidebar-text: #e9e7ff; --sidebar-dim:#bcb6e9; --table-head:#251a57;
-    }
-    [data-theme="dark"]{
-      --bg:#0f1220; --card:#151935; --ink:#e9ecf7; --muted:#a7b0c0; --border:#23284a;
-      --sidebar-bg: linear-gradient(180deg, #14112b 0%, #1a1740 100%);
-      --sidebar-text:#d7dbff; --sidebar-dim:#9aa2da; --table-head:#1e1a3e;
-    }
-
-    html,body{background:var(--bg);color:var(--ink);font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif}
-    a{text-decoration:none}
-
-    /* ===== Topbar ===== */
-    .topbar{position:sticky;top:0;z-index:1030;background:rgba(255,255,255,.65);backdrop-filter:saturate(140%) blur(8px);border-bottom:1px solid var(--border)}
-    [data-theme="dark"] .topbar{background:rgba(16,20,40,.7)}
-    .brand-badge{background:linear-gradient(90deg,var(--violet-700),var(--violet));color:#fff;padding:.35rem .7rem;border-radius:.6rem;font-weight:800;letter-spacing:.5px}
-
-    /* ===== Layout ===== */
-    .app{min-height:100dvh}
-    .sidebar{background:var(--sidebar-bg);color:var(--sidebar-text)}
-    .sidebar .nav-link{color:var(--sidebar-dim);font-weight:600;border-radius:.65rem}
-    .sidebar .nav-link.active{background:rgba(255,255,255,.12);color:#fff}
-    .sidebar .nav-link:hover{background:rgba(255,255,255,.08);color:#fff}
-    .sidebar .menu-title{color:rgba(255,255,255,.65);font-size:.75rem;letter-spacing:.08em;font-weight:700;margin-top:.75rem}
-
-    /* ===== Cards / widgets ===== */
-    .card-soft{border:1px solid var(--border);border-radius:1rem;background:var(--card);box-shadow:0 6px 18px rgba(16,24,40,.06)}
-    .kpi{transition:transform .18s ease, box-shadow .18s ease}
-    .kpi:hover{transform:translateY(-4px);box-shadow:0 10px 28px rgba(16,24,40,.12)}
-    .kpi .icon{width:46px;height:46px;border-radius:12px;display:grid;place-items:center;font-size:1.2rem}
-    .icon-violet{background:rgba(106,53,255,.12);color:#7e5bff}
-    .icon-bleu{background:rgba(2,166,201,.12);color:#0bb0cf}
-    .icon-jaune{background:rgba(255,204,51,.18);color:#c09400}
-    .icon-muted{background:rgba(108,122,134,.15);color:#8a96a3}
-
-    /* ===== Table ===== */
-    .table thead th{white-space:nowrap;border-bottom:none;background:var(--table-head);color:#fff}
-    .table tbody tr:hover{background:rgba(106,53,255,.06)}
-    .badge-cat{font-weight:700}
-
-    /* ===== Toolbar filtres ===== */
-    .toolbar{gap:.5rem}
-    .toolbar .form-control,.toolbar .form-select{border-radius:.7rem;border:1px solid var(--border);background:var(--card);color:var(--ink)}
-
-    /* ===== Offcanvas (mobile) ===== */
-    .offcanvas-nav .nav-link{font-weight:700}
-
-    /* ===== Toggle thème ===== */
-    .theme-toggle{border:1px solid var(--border)}
-  </style>
+  <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
 </head>
 <body>
 
 <!-- TOPBAR -->
 <header class="topbar py-2">
   <div class="container-fluid d-flex align-items-center justify-content-between">
+    <span>
+      <img src="{{ asset('images/Logo_SIOKA_2.png') }}" alt="Logo" class="img-fluid" style="max-height: 40px;">        
+    </span>
     <div class="d-flex align-items-center gap-3">
-      <span class="brand-badge">SIOKA</span>
       <span class="d-none d-md-inline text-secondary-emphasis">Tableau de bord</span>
     </div>
     <div class="d-flex align-items-center gap-2">
@@ -85,63 +34,49 @@
         <i class="bi bi-list"></i>
       </button>
       <button class="btn btn-sm theme-toggle" id="btnTheme"><i class="bi bi-moon-stars me-1"></i> Thème</button>
-      <a class="btn btn-sm btn-outline-secondary d-none d-md-inline" href="#"><i class="bi bi-globe2 me-1"></i> Voir le site</a>
-      <button class="btn btn-sm btn-primary" id="btnAdd"><i class="bi bi-plus-lg me-1"></i> Nouvel article</button>
+      <a class="btn btn-sm btn-outline-secondary d-none d-md-inline" href="{{ route('index') }}"><i class="bi bi-globe2 me-1"></i> Voir le site</a>
+      {{-- <button class="btn btn-sm btn-primary" id="btnAdd"><i class="bi bi-plus-lg me-1"></i> Nouvel article</button> --}}
+      <!-- NOM UTILISATEUR + DÉCONNEXION -->
+      <div class="dropdown d-none d-md-inline">
+        <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="userMenu" data-bs-toggle="dropdown" aria-expanded="false">
+          Admin
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenu">
+          <li>
+            <form method="POST" action="{{ route('logout') }}">
+              @csrf
+              <button class="dropdown-item text-danger" type="submit"><i class="bi bi-box-arrow-right me-1"></i> Déconnexion</button>
+            </form>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </header>
 
+
+
 <div class="container-fluid app">
   <div class="row">
     <!-- SIDEBAR (desktop) -->
-    <aside class="col-md-2 d-none d-md-block sidebar p-3">
-      <div class="menu-title">MENU</div>
-      <nav class="nav flex-column gap-1 mt-2">
-        <a class="nav-link active" href="#"><i class="bi bi-speedometer2 me-2"></i> Tableau de bord</a>
-        <a class="nav-link" href="#"><i class="bi bi-newspaper me-2"></i> Actualités</a>
-        <a class="nav-link" href="#"><i class="bi bi-broadcast me-2"></i> Webradio</a>
-        <a class="nav-link" href="#"><i class="bi bi-tv me-2"></i> WebTV</a>
-        <a class="nav-link" href="#"><i class="bi bi-images me-2"></i> Galerie</a>
-        <a class="nav-link" href="#"><i class="bi bi-people me-2"></i> Utilisateurs</a>
-        <a class="nav-link" href="#"><i class="bi bi-gear me-2"></i> Paramètres</a>
-      </nav>
-      <div class="menu-title">ACTIONS RAPIDES</div>
-      <div class="d-grid gap-2 mt-2">
-        <button class="btn btn-light btn-sm" id="btnExport"><i class="bi bi-download me-1"></i> Exporter JSON</button>
-        <button class="btn btn-outline-light btn-sm" id="btnReset"><i class="bi bi-arrow-counterclockwise me-1"></i> Réinitialiser</button>
-      </div>
+    @include('dashboard-sidebar-component.sidebar')
+
     </aside>
 
     <!-- OFFCANVAS (mobile burger) -->
-    <div class="offcanvas offcanvas-start offcanvas-nav" tabindex="-1" id="offcanvasNav">
-      <div class="offcanvas-header">
-        <h5 class="offcanvas-title">Menu</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Fermer"></button>
-      </div>
-      <div class="offcanvas-body">
-        <nav class="nav flex-column gap-1">
-          <a class="nav-link active" href="#"><i class="bi bi-speedometer2 me-2"></i> Tableau de bord</a>
-          <a class="nav-link" href="#"><i class="bi bi-newspaper me-2"></i> Actualités</a>
-          <a class="nav-link" href="#"><i class="bi bi-broadcast me-2"></i> Webradio</a>
-          <a class="nav-link" href="#"><i class="bi bi-tv me-2"></i> WebTV</a>
-          <a class="nav-link" href="#"><i class="bi bi-images me-2"></i> Galerie</a>
-          <a class="nav-link" href="#"><i class="bi bi-people me-2"></i> Utilisateurs</a>
-          <a class="nav-link" href="#"><i class="bi bi-gear me-2"></i> Paramètres</a>
-        </nav>
-      </div>
-    </div>
+    @include('dashboard-sidebar-component.sidebar_burger')
 
     <!-- MAIN -->
     <main class="col-md-10 ms-sm-auto px-3 px-md-4 py-4">
       <div class="d-flex justify-content-between align-items-center mb-3">
-        <h1 class="h4 m-0">Bienvenue, Admin</h1>
+        <h1 class="h4 m-0">Bienvenue</h1>
         <div class="d-flex gap-2">
           <button class="btn btn-outline-secondary btn-sm" id="btnExportTop"><i class="bi bi-download me-1"></i> Exporter</button>
           <button class="btn btn-outline-danger btn-sm" id="btnResetTop"><i class="bi bi-trash me-1"></i> Vider</button>
         </div>
       </div>
 
-      <!-- STATS / KPI -->
+      {{-- <!-- STATS / KPI -->
       <div class="row g-3 mb-4" id="statsRow">
         <div class="col-6 col-lg-3">
           <div class="card-soft kpi p-3 d-flex flex-row align-items-center gap-3">
@@ -224,7 +159,7 @@
         </div>
       </div>
 
-      <p class="small text-secondary mt-3">Astuce : toutes les opérations (ajout, édition, suppression) sont enregistrées dans votre navigateur via <code>localStorage</code>.</p>
+      
 
       <!-- CHARTS (facultatif, pur front) -->
       <div class="row g-3 mt-4">
@@ -240,7 +175,10 @@
             <canvas id="doughnutChart" height="90"></canvas>
           </div>
         </div>
-      </div>
+      </div> --}}
+
+
+      @livewire('articles-crud')
 
     </main>
   </div>
@@ -336,6 +274,8 @@
     </div>
   </div>
 </div>
+
+
 
 <!-- JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

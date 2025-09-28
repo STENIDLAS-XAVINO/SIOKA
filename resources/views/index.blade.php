@@ -5,61 +5,94 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Accueil | SIOKA</title>
   <meta name="description" content="Maquette HTML/CSS/JS + Bootstrap inspirée de sioka.org, avec Webradio, WebTV, rubriques citoyennes et actualités." />
+  {{-- Icône --}}
+  <link rel="icon" href="{{ asset('images/Logo_SIOKA_2.png') }}" type="image/png">
+  <link rel="shortcut icon" href="{{ asset('images/Logo_SIOKA_2.png') }}" type="image/png">
+  
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
   <link rel="stylesheet" href="{{ asset('/css/style.css') }}">
   @livewireStyles
 </head>
 <body>
-  <!-- HEADER -->
-   @include('composants.header')
+  @include('composants.header')
 
-  <!-- HERO CAROUSEL + ESSENTIEL -->
+  {{-- Slide Injecté --}}
   <header class="hero pt-4 pb-3">
     <div class="container">
       <div class="row g-4 align-items-stretch">
-        <div class="col-lg-7">
-          <div id="heroCarousel" class="carousel slide ratio ratio-16x9" data-bs-ride="carousel">
-            <div class="carousel-inner" id="carouselInner"><!-- slides injectés --></div>
-            <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev"><span class="carousel-control-prev-icon" aria-hidden="true"></span><span class="visually-hidden">Précédent</span></button>
-            <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next"><span class="carousel-control-next-icon" aria-hidden="true"></span><span class="visually-hidden">Suivant</span></button>
+      <div class="col-lg-7">
+        <div id="heroCarousel" class="carousel slide ratio ratio-16x9" data-bs-ride="carousel">
+          <div class="carousel-inner">
+            @forelse($une as $article)
+            <div class="carousel-item @if ($loop->first) active @endif">
+              <a href="{{ route('articles.show', $article->id) }}" class="stretched-link">
+                @if($article->image)
+                <img src="{{ asset('storage/' . $article->image) }}" class="d-block w-100" alt="{{ $article->title }}" style="object-fit: cover; height: 100%;">
+                @endif
+              </a>
+              <div class="carousel-caption d-none d-md-flex flex-column justify-content-center align-items-center h-100">
+                <div class="p-3 rounded-3" style="backdrop-filter: blur(5px); background-color: rgba(0, 0, 0, 0.4);">
+                  <span class="badge rounded-pill text-bg-secondary mb-2">{{ ucfirst($article->cat) }}</span>
+                  <h5 class="text-white">{{ $article->title }}</h5>
+                  <p class="text-white d-none d-lg-block">{{ $article->excerpt }}</p>
+                </div>
+              </div>
+            </div>
+            @empty
+            {{-- <div class="carousel-item active">
+              <img src="https://via.placeholder.com/1200x800.png?text=Pas+d'articles" class="d-block w-100" alt="Pas d'articles" style="object-fit: cover; height: 100%;">
+              <div class="carousel-caption d-none d-md-block">
+                <h5>Aucun article à la une</h5>
+                <p>Veuillez ajouter des articles pour les afficher ici.</p>
+              </div>
+            </div> --}}
+            @endforelse
           </div>
+          <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev"><span class="carousel-control-prev-icon" aria-hidden="true"></span><span class="visually-hidden">Précédent</span></button>
+          <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next"><span class="carousel-control-next-icon" aria-hidden="true"></span><span class="visually-hidden">Suivant</span></button>
         </div>
+      </div>
         <div class="col-lg-5">
           <div class="p-3 bg-white rounded-4 shadow h-100">
             <div class="d-flex align-items-center justify-content-between mb-2">
               <h3 class="h6 m-0">À la une</h3>
               <div class="btn-group" role="group" aria-label="Résumé">
+                 {{-- Ces boutons sont toujours gérés par votre script.js --}}
                 <button class="btn btn-outline-secondary btn-sm active" data-duration="5">5 min</button>
                 <button class="btn btn-outline-secondary btn-sm" data-duration="10">10 min</button>
                 <button class="btn btn-outline-secondary btn-sm" data-duration="15">15 min</button>
               </div>
             </div>
-            <div class="list-group list-group-flush" id="essentielList"></div>
+            {{-- Restauration de la liste dynamique --}}
+            <div class="list-group list-group-flush" id="essentielList">
+                @forelse($une as $article)
+                <a href="{{ route('articles.show', $article->id) }}" class="list-group-item list-group-item-action">
+                    <div class="d-flex w-100 justify-content-between">
+                        <h6 class="mb-1 text-truncate">{{ $article->title }}</h6>
+                        <small class="text-body-secondary">{{ \Carbon\Carbon::parse($article->date)->diffForHumans() }}</small>
+                    </div>
+                    <p class="mb-1 text-truncate-3">{{ $article->excerpt }}</p>
+                </a>
+                @empty
+                <div class="text-center p-4">
+                    <p class="text-secondary">Aucun article à la une pour le moment.</p>
+                </div>
+                @endforelse
+            </div>
           </div>
         </div>
       </div>
     </div>
   </header>
 
-  <!-- DERNIÈRES ACTUALITÉS -->
   <section id="actus" class="py-4">
     <div class="container">
-      <div class="d-flex justify-content-between align-items-center mb-2">
-        <h3 class="h5 m-0">Dernières actualités</h3>
-        <div class="btn-group" role="group" aria-label="Filtre">
-          <button class="btn btn-outline-secondary btn-sm active" data-cat="toutes">Toutes</button>
-          <button class="btn btn-outline-secondary btn-sm" data-cat="gouvernance">Gouvernance</button>
-          <button class="btn btn-outline-secondary btn-sm" data-cat="societe">Société</button>
-          <button class="btn btn-outline-secondary btn-sm" data-cat="environnement">Environnement</button>
-          <button class="btn btn-outline-secondary btn-sm" data-cat="economie">Économie</button>
-        </div>
-      </div>
-      <div class="row g-3" id="actusGrid"></div>
+      {{-- Le composant Livewire s'occupe de tout --}}
+      @livewire('derniers-articles')
     </div>
   </section>
 
-  <!-- WEBRADIO / WEBTV -->
   <section id="webradio" class="py-4 bg-white">
     <div class="container">
       <div class="row g-4 align-items-center">
@@ -70,8 +103,7 @@
               <h3 class="h6 m-0">Webradio — Direct</h3>
             </div>
             <audio id="radioPlayer" class="w-100" controls preload="none">
-              <!-- Remplace l'URL par ton flux Shoutcast/Icecast HTTPS -->
-              <source src="https://78.129.241.110:18399/;" type="audio/mpeg" />
+              <source src="https://securestreams.autopo.st:2584/;" type="audio/mpeg" />
               Votre navigateur ne supporte pas l'audio HTML5.
             </audio>
           </div>
@@ -82,17 +114,17 @@
               <div class="feature-icon" style="background:rgba(2,166,201,.12);color:var(--bleu)"><i class="bi bi-tv"></i></div>
               <h3 class="h6 m-0">WebTV — Dernière vidéo</h3>
             </div>
+
             <div class="ratio ratio-16x9 rounded-3 overflow-hidden">
-              <!-- Remplace par le live HLS/DASH ou YouTube ID -->
               <iframe src="https://www.youtube.com/embed/vGF1cdsSxZI" title="WebTV" allowfullscreen loading="lazy"></iframe>
             </div>
+
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- MISSION / VISION / VALEURS -->
   <section class="py-5">
     <div class="container">
       <div class="row g-3">
@@ -121,7 +153,6 @@
     </div>
   </section>
 
-  <!-- GALERIE -->
   <section class="py-4 bg-white">
     <div class="container">
       <div class="d-flex justify-content-between align-items-center mb-3">
@@ -132,7 +163,6 @@
     </div>
   </section>
 
-  <!-- NEWSLETTER -->
   <section id="newsletter" class="py-5">
     <div class="container">
       <div class="row g-4 align-items-center">
@@ -160,7 +190,6 @@
     </div>
   </section>
 
-  <!-- FOOTER -->
   @include('composants.footer')
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
